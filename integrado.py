@@ -30,9 +30,6 @@ input_shape = input_details[0]['shape']
 
 print(input_shape)
 
-#id da imagem
-num = 0
-
 # Inicializar o objeto de captura de vídeo
 cap = cv2.VideoCapture(0)
 if not cap.isOpened():
@@ -119,6 +116,7 @@ def main():
             "equipe": 0,
             "bateria": humidity,
             "temperatura": temperature,
+            "pressao": 0,
             "giroscopio": mpu.gyro,
             "acelerometro": mpu.acceleration,
             "payload":{
@@ -128,6 +126,8 @@ def main():
         }
         datajson = json.dumps(data)
         print(datajson)
+        with open('data_log.log', 'a') as file:
+            file.write(str(datajson) + '\n' + time.strftime("%H_%M_%S", time.localtime()) + '\n')
         # Send the data to the server
         response = requests.post('https://obsat.org.br/teste_post/envio.php', json=datajson)
         if response.status_code == 200:
@@ -136,8 +136,6 @@ def main():
             print("Failed to send data.")
 
         time.sleep(10)
-        cap.release()
-        cv2.destroyAllWindows()
 
 if __name__ == "__main__":
     main()
