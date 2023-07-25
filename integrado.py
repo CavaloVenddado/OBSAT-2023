@@ -5,6 +5,8 @@ import adafruit_mpu6050
 import numpy as np
 import cv2
 import tflite_runtime.interpreter as tflite
+import requests
+
 tempo_de_ligamento = time.time()
 
 # Initialize MPU6050
@@ -51,8 +53,9 @@ def read_sensor_data():
     else:
         print("Falha ao ler os dados do sensor")
 
-    print("Temperatura: %.2f" % mpu.temperature, "°C")
-    print("Giro X: %.2f, Y: %.2f, Z: %.2f" % (mpu.gyro))
+    print("Temperatura: %.2f" % temperature, "°C")
+    print("Giro  X: %.2f, Y: %.2f, Z: %.2f" % (mpu.gyro))
+    print("Accel X: %.2f, Y: %.2f, Z: %.2f" % (mpu.accel))
     print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
     print("________________________________________________________")
 
@@ -90,6 +93,25 @@ def processFrame():
 
     # Imprimir os resultados
     print("preservado: ", output_data[0][0], " desmatado: ", output_data[0][1])
+
+def transmit():
+    data = {
+        "equipe": 0,
+        "bateria": humidity,
+        "temperatura": temperature,
+        "giroscopio": mpu.gyro,
+        "acelerometro": mpu.accel,
+        "payload":{
+            "desmatado":output_data[0][1],
+            "preservado":output_data[0][0]
+        }
+    }
+    # Send the data to the server
+    response = requests.post('http://localhost:5000/data', json=data)
+    if response.status_code == 200:
+        print("Data sent successfully.")
+    else:
+        print("Failed to send data.")
 
 def main():
     while True:
