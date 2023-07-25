@@ -6,7 +6,7 @@ import numpy as np
 import cv2
 import tflite_runtime.interpreter as tflite
 import requests
-
+import json
 tempo_de_ligamento = time.time()
 
 # Initialize MPU6050
@@ -78,6 +78,8 @@ def main():
         # Ler a imagem (jogar 10 fora antes (baita gambiarra lol))
         for i in range(0, 10):
             ret, frame = cap.read()
+        while frame is None:
+            ret, frame = cap.read()
             
 
         # Exibir a imagem em um visualizador
@@ -124,8 +126,10 @@ def main():
                 "preservado":str(output_data[0][0])
             }
         }
+        datajson = json.dumps(data)
+        print(datajson)
         # Send the data to the server
-        response = requests.post('https://obsat.org.br/teste_post/envio.php', json=data)
+        response = requests.post('https://obsat.org.br/teste_post/envio.php', json=datajson)
         if response.status_code == 200:
             print("Data sent successfully.")
         else:
