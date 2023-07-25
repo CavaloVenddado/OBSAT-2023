@@ -67,7 +67,7 @@ def main():
 
         print("Temperatura: %.2f" % temperature, "°C")
         print("Giro  X: %.2f, Y: %.2f, Z: %.2f" % (mpu.gyro))
-        print("Accel X: %.2f, Y: %.2f, Z: %.2f" % (mpu.accel))
+        print("Accel X: %.2f, Y: %.2f, Z: %.2f" % (mpu.acceleration))
         print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
         print("________________________________________________________")
 
@@ -118,7 +118,7 @@ def main():
             "bateria": humidity,
             "temperatura": temperature,
             "giroscopio": mpu.gyro,
-            "acelerometro": mpu.accel,
+            "acelerometro": mpu.acceleration,
             "payload":{
                 "desmatado":output_data[0][1],
                 "preservado":output_data[0][0]
