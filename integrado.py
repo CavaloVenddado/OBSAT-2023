@@ -120,8 +120,8 @@ def main():
             "giroscopio": mpu.gyro,
             "acelerometro": mpu.acceleration,
             "payload":{
-                "desmatado":output_data[0][1],
-                "preservado":output_data[0][0]
+                "desmatado":str(output_data[0][1]),
+                "preservado":str(output_data[0][0])
             }
         }
         # Send the data to the server
